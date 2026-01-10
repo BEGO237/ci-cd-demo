@@ -1,7 +1,14 @@
-FROM node:18-alpine
+# Utiliser une image Node officielle
+FROM node:18
+
+# Définir le dossier de travail
 WORKDIR /app
+
+# Copier les fichiers
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 COPY . .
-EXPOSE 3000
-CMD ["node","index.js"]
+
+# Lancer l'application
+CMD ["node", "app.js"]
+
