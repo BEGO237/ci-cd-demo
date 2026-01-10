@@ -1,11 +1,25 @@
 pipeline {
-    agent any // Dit à Jenkins d'exécuter le pipeline sur n'importe quel agent disponible
+    agent any
+    tools {
+        // Remplacez 'NodeJS 18' par le nom que vous avez donné à votre installation Node dans Jenkins config
+        nodejs 'NodeJS 18' 
+    }
     stages {
-        stage('Bonjour') { // Définit une étape nommée 'Bonjour'
+        stage('Installation des dépendances') {
             steps {
-                echo 'Bonjour BEGO237, mon premier pipeline Jenkins a réussi !' // Affiche un message dans la console
+                sh 'npm install' // Exécute 'npm install' pour télécharger les paquets nécessaires
+            }
+        }
+        stage('Build/Test') {
+            steps {
+                // Remplacez 'test' par 'build' si vous avez un script de build, ou ajoutez les deux étapes séparément
+                sh 'npm test' 
+            }
+        }
+        stage('Bonjour Final') {
+            steps {
+                echo 'Pipeline Node.js terminé avec succès !'
             }
         }
     }
 }
-
