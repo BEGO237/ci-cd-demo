@@ -1,1 +1,11 @@
+pipeline {
+    agent any // Dit à Jenkins d'exécuter le pipeline sur n'importe quel agent disponible
+    stages {
+        stage('Bonjour') { // Définit une étape nommée 'Bonjour'
+            steps {
+                echo 'Bonjour BEGO237, mon premier pipeline Jenkins a réussi !' // Affiche un message dans la console
+            }
+        }
+    }
+}
 
