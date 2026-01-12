@@ -1,20 +1,30 @@
-
 pipeline {
-    agent any
+    agent {
+        label 'windows'   // Assurez-vous que votre agent Jenkins est un nœud Windows
+    }
+
+    environment {
+        NODE_VERSION = "24.12.0"
+    }
 
     stages {
-        stage('Check Node') {
+        stage('Setup Node.js') {
+            steps {
+                // Téléchargement et installation silencieuse de Node.js
+                bat """
+                echo Installing Node.js %NODE_VERSION%
+                curl -o nodejs.msi https://nodejs.org/dist/v%NODE_VERSION%/node-v%NODE_VERSION%-x64.msi
+                msiexec /i nodejs.msi /quiet /qn /norestart
+                """
+            }
+        }
+
+        stage('Check Node.js Version') {
             steps {
                 bat 'node -v'
                 bat 'npm -v'
             }
         }
-        stage('Build') {
-           steps {
-           bat 'echo Build OK'
-    }
-}
-
 
         stage('Install Dependencies') {
             steps {
@@ -22,13 +32,32 @@ pipeline {
             }
         }
 
-        
+        stage('Run Tests') {
+            steps {
+                bat 'npm test'
+            }
         }
 
-        stage('Fin') {
+        stage('Build') {
             steps {
-                echo 'Pipeline Node.js terminé avec succès ✅'
+                bat 'npm run build'
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline terminé.'
+        }
+        success {
+            echo 'Build et tests réussis ✅'
+        }
+        failure {
+            echo 'Échec du pipeline ❌'
+        }
+    }
 }
+
+
+
+  
