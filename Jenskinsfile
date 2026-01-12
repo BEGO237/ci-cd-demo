@@ -1,24 +1,30 @@
+
 pipeline {
     agent any
-    tools {
-        // Remplacez 'NodeJS 18' par le nom que vous avez donné à votre installation Node dans Jenkins config
-        nodejs 'NodeJS 18' 
-    }
+
     stages {
-        stage('Installation des dépendances') {
+        stage('Check Node') {
             steps {
-                sh 'npm install' // Exécute 'npm install' pour télécharger les paquets nécessaires
+                bat 'node -v'
+                bat 'npm -v'
             }
         }
-        stage('Build/Test') {
+
+        stage('Install Dependencies') {
             steps {
-                // Remplacez 'test' par 'build' si vous avez un script de build, ou ajoutez les deux étapes séparément
-                sh 'npm test' 
+                bat 'npm install'
             }
         }
-        stage('Bonjour Final') {
+
+        stage('Build / Test') {
             steps {
-                echo 'Pipeline Node.js terminé avec succès !'
+                bat 'npm test'
+            }
+        }
+
+        stage('Fin') {
+            steps {
+                echo 'Pipeline Node.js terminé avec succès ✅'
             }
         }
     }
